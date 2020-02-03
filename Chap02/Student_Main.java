@@ -23,6 +23,7 @@ public class Student_Main{
 
         System.out.println(array);
         System.out.println("Hello World...");
+        System.out.println("Hello world...");
 
     }
 }
