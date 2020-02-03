@@ -13,8 +13,9 @@ public class Main {
 
         /**
          *  数组实现
+         *  初始capacity是1,数组很小,但是会给数组动态分配空间,每次分配2倍
          */
-        ArrayList01<Integer> array = new ArrayList01<>(20); //泛型内不能存放基本数据类型,只能放包装类
+        ArrayList01<Integer> array = new ArrayList01<>(1); //泛型内不能存放基本数据类型,只能放包装类
         for(int i=1;i<=10;i++){
             array.addLast(i);
         }
@@ -27,10 +28,22 @@ public class Main {
         System.out.println("--------------------------");
 
         array.insert(6, 70000);
+        array.insert(6, 70000);
+        array.insert(6, 70000);
+        array.insert(6, 70000);
         System.out.println(array);
         System.out.println("--------------------------");
 
         array.delete(1);
+        array.delete(1);
+        array.delete(1);
+        array.delete(1);
+        array.delete(1);
+        array.delete(1);
+        array.delete(1);
+        array.delete(1);
+
+
         System.out.println(array);
 
         System.out.println("Hello World...");

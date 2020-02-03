@@ -76,15 +76,16 @@ public class ArrayList01<Element>{
      * @param e
      */
     public void insert(int index ,Element e){
-        if(size==data.length ) {
-            throw new IllegalArgumentException("AddLast failed. Array is full.");
-        }
         if(index <0 || index > size){
             throw new IllegalArgumentException("AddLast failed. Required index is incorrect.");
         }
+        if(size==data.length ) {
+            resize(2 * data.length);
+        }
 
 
-        for(int i= size ;i >= index;i--){
+        
+        for(int i= size-1 ;i >= index;i--){
             data[i+1] = data[i];
         }
         data[index] = e;
@@ -144,13 +145,37 @@ public class ArrayList01<Element>{
             throw new IllegalArgumentException("Get failed. Required index is incorrect.");
         }
         Element temp = data[index];
-        for(int i = index ;i<size ; i++){
-            data[i] = data[i+1]; 
+        for(int i = index+1 ;i<size ; i++){
+            data[i-1] = data[i]; 
         }
+        /*
+        for(int i = index ;i<size ; i++){
+            data[i] = data[i+1];  //在缩小数组容量时失败了  ???
+        }
+        */
         size--;
         data[size] = null; //这句话不是必要,但因为size一直指向这个空间,所以Java的回收机制不能回收这个空间
+
+        if(size == data.length/2){
+            resize(data.length/2);
+        }
+
         return temp;
     }
+
+    /**
+     * 扩容,一次2倍;也可以缩小容量,一次缩小一半
+     * @param newCapacity
+     */
+    private void resize (int newCapacity){
+        Element[] newData = (Element[])new Object[newCapacity];
+        for(int i=0;i <size ;i++){
+            newData[i] = data[i];
+        }
+        data = newData;
+    }
+
+
 
 
 
