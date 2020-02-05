@@ -1,5 +1,4 @@
 
-
 public class ArrayStack<Element> implements Stack<Element>{
     Array<Element> array;
 
