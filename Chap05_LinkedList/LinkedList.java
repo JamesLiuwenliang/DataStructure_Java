@@ -1,6 +1,5 @@
 /**
  * dummyHead : 虚拟头节点,不占size
- * 
  * @param <E>
  */
 public class LinkedList<E> {
@@ -52,7 +51,11 @@ public class LinkedList<E> {
     }
 
 
-    public Node delete (int pos){
+    public E delete (int pos){
+
+        if(pos < 0 || pos >size){
+            throw new IllegalArgumentException("Add failed. Illegal position.");
+        }
 
         Node delNode = null;
         Node pre = dummyHead;
@@ -60,10 +63,21 @@ public class LinkedList<E> {
             pre = pre.next;
         }
         delNode = pre.next;
-        pre = pre.next.next;
-        size--;
-        return delNode;
+        pre.next = pre.next.next;
 
+        //这句话必须放在最后
+        delNode.next = null;
+        size--;
+        return (E) delNode.e;
+
+    }
+
+    public E deleteFirst(){
+        return delete(0);
+    }
+
+    public E deleteLast(){
+        return delete(size-1);
     }
 
     public void change(E e ,int pos){
@@ -101,11 +115,14 @@ public class LinkedList<E> {
     @Override
     public String toString(){
         StringBuilder res = new StringBuilder();
-        Node current = dummyHead.next;
-        while(cur. != null){
+        Node cur = dummyHead.next;
 
+        while (cur !=  null){
+            res.append(cur + "->");
+            cur = cur.next;
         }
-
+        res.append(" NULL");
+        return res.toString();
     }
 
 }
