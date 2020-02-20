@@ -27,31 +27,32 @@
  */
 /**
  * query
-
-
-
- 
+    找某一个线段区间的和,如果操作是(a, b) -> a-b ,则是该线段上最左边的数依次减去线段区间内后边的数
  */
 
 public class Main {
 
-    public static void main(String[] args){
-        Integer[] nums  = {-2,0,3};
-//        SegmentTree<Integer> segment = new SegmentTree<>(nums, new Merger<Integer>() {
-//            @Override
-//            public Integer merger(Integer a, Integer b) {
-//                return a + b;
-//            }
-//
-//        });
+
+
+    public static void main(String[] args) {
+        // Integer[] nums = {-2,0,3,-4};
+        Integer[] nums = { -2, -1, 3, -5, 2, -1 };
+
+    //     SegmentTree<Integer> segment = new SegmentTree<>(nums, new Merger<Integer>() {
+    //         @Override
+    //         public Integer merger(Integer a, Integer b) {
+    //             return a+b;
+    //        }
+
+    //    });
 
         // 用Lamda表达式也可以实现
-        SegmentTree<Integer> segTree = new SegmentTree<>(nums, (a, b) -> a + b);
+        SegmentTree<Integer> segTree = new SegmentTree<>(nums, (a, b) -> a-b) ;
 
         // -2 + 0 + 3
-        // System.out.println(segTree.query(0,2));
+        System.out.println(segTree.query(1,3));
 
-        System.out.println(segTree);
+        // System.out.println(segTree);
 
         System.out.println("Hello World.");
     }

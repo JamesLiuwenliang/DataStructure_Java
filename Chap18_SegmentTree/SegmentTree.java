@@ -86,10 +86,10 @@ public class SegmentTree<E> {
         int mid = l+(r - l) /2;
         int leftTreeIndex = leftChild(treeIndex);
         int rightTreeIndex = rightChild(treeIndex);
-        if(queryL >= mid  ){
+        if(queryL >= mid+1 ){
             return query(rightTreeIndex,mid +1 , r ,queryL,queryR);
         }
-        else if(queryR <= mid+1){
+        else if(queryR <= mid){
             return query(leftTreeIndex , l ,mid ,queryL ,queryR);
         }
         else {
@@ -99,11 +99,9 @@ public class SegmentTree<E> {
             return merger.merger(leftResult,rightResult);
         }
 
-
-
-
-
     }
+
+
 
     @Override
     public String toString(){
