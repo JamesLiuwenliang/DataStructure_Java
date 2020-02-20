@@ -1,4 +1,3 @@
-package tmp;
 
 public interface Merger<E> {
 
