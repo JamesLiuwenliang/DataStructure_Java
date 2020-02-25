@@ -1,4 +1,4 @@
-package tmp;
+
 
 public interface UF {
 

@@ -1,22 +1,20 @@
 
-
 /**
- * 基于size的优化
+ * 基于深度(rank)合并
+ * 当根节点下很多子孩子(size大)但是另一个棵树每个节点都只有一个孩子但是很高的时候,
+ * 合理的合并方式应该是矮的树(即使size大)向高的树依附
  */
-public class QuickUnion_Size implements UF {
+public class QuickUnion_Rank implements  UF {
 
     private int[] parent;
-    // sz[i]表示以i为根的集合中元素个数
-    private int[] sz;
-    public QuickUnion_Size(int size){
+    private int[] rank;
+    public QuickUnion_Rank(int size){
         parent = new int[size];
-        sz = new int[size] ;
-
+        rank = new int[size];
         // 每个节点都独立的是一棵树
         for (int i = 0; i < size; i++) {
             parent[i] = i;
-            // 每个元素独立成为一个集合,集合里的个数为1
-            sz[i] =1;
+            rank[i] =1 ;
         }
     }
 
@@ -59,20 +57,20 @@ public class QuickUnion_Size implements UF {
             return ;
         }
 
-        // 小树去依附大树
-        // 根据两个元素所在树的元素个数不同判断合并的方向
-        // 将两个元素个数少的集合合并到元素个数多的集合上
-        if(sz[pRoot] > sz[qRoot]){
+        // 根据两个元素所在树的rank不同判断合并方向
+        // 将rank低的集合合并到rank高的集合上
+        // rank高度不需要维护,因为矮树成为高树的子树后,合并出的树的高度还是高的树的高度
+        // 当两个树高度相等的时候,需要成为根节点的rank+1(因为另一个树成为了他的子树,而多出1个高度)
+        if(rank[pRoot] > rank[qRoot]){
             parent[qRoot] = pRoot;
-            sz[pRoot] += sz[qRoot];
         }
-        else{
+        else if(rank[pRoot] < rank[qRoot]){
             parent[pRoot] = qRoot;
-            sz[qRoot] += sz[pRoot];
         }
-
-//        parent[pRoot] = qRoot;
+        else { // rank[pRoot] == rank[qRoot]
+            parent[pRoot] = qRoot;
+            rank[qRoot] ++;
+        }
     }
-
 
 }

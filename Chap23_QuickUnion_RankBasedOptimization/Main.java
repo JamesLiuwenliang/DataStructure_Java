@@ -1,6 +1,5 @@
 
 
-
 import java.util.*;
 
 /**
@@ -40,13 +39,14 @@ public class Main {
         int size = 100000;
         int m = 100000;
 
-        UnionFind1 uf1 = new UnionFind1(size);
-        System.out.println("UnionFind1 : "+testUF(uf1,m) + "s");
+        // 基于size的优化和基于rank的优化效率提升差不多,但是基于rank的优化要更加合理,所以一般选择基于rank的优化
+        // 将合并操作基于两个集合的size做了一定的优化后,效率大幅度提升
+        QuickUnion_Size qu_s = new QuickUnion_Size(size);
+        System.out.println("QuickUnion_Size : "+testUF(qu_s,m) + "s");
 
-        // 因为需要合并的操作过多,有可能比uf1要慢
-        QuickUnion qu1 = new QuickUnion(size);
-        System.out.println("QuickUnion : "+testUF(qu1,m) + "s");
-
+        // 将合并操作基于两个集合的rank做了一定的优化
+        QuickUnion_Rank qu_r = new QuickUnion_Rank(size);
+        System.out.println("QuickUnion_Rank : "+testUF(qu_r,m) + "s");
 
 
         System.out.println("Hello World.");
