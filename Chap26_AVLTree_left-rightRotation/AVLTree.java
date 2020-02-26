@@ -1,7 +1,10 @@
-
+package tmp;
 
 import java.util.ArrayList;
 
+/**
+ * AVLTree实现\删除增加三个步骤 : 更新height值,计算平衡因子,平衡维护
+ */
 public class AVLTree<K extends Comparable<K>, V> {
 
     private class Node{
@@ -305,13 +308,17 @@ public class AVLTree<K extends Comparable<K>, V> {
             return null;
         }
 
+        // 将原本需要返回的Node先暂存起来,维护一下再return
+        Node retNode ;
         if( key.compareTo(node.key) < 0 ){
             node.left = remove(node.left , key);
-            return node;
+            retNode = node ;
+//            return node;
         }
         else if(key.compareTo(node.key) > 0 ){
             node.right = remove(node.right, key);
-            return node;
+            retNode = node ;
+//            return node;
         }
         else{   // key.compareTo(node.key) == 0
 
@@ -320,29 +327,73 @@ public class AVLTree<K extends Comparable<K>, V> {
                 Node rightNode = node.right;
                 node.right = null;
                 size --;
-                return rightNode;
+                retNode = rightNode;
+//                return rightNode;
             }
-
             // 待删除节点右子树为空的情况
-            if(node.right == null){
+            else if(node.right == null){
                 Node leftNode = node.left;
                 node.left = null;
                 size --;
-                return leftNode;
+                retNode = leftNode;
+//                return leftNode;
             }
+            else {
+                // 待删除节点左右子树均不为空的情况
 
-            // 待删除节点左右子树均不为空的情况
+                // 找到比待删除节点大的最小节点, 即待删除节点右子树的最小节点
+                // 用这个节点顶替待删除节点的位置
+                Node successor = minimum(node.right);
+                // 递归调用remove操作,进一步做平衡维护
+                successor.right = remove(node.right, successor.key);
+                successor.left = node.left;
 
-            // 找到比待删除节点大的最小节点, 即待删除节点右子树的最小节点
-            // 用这个节点顶替待删除节点的位置
-            Node successor = minimum(node.right);
-            successor.right = removeMin(node.right);
-            successor.left = node.left;
+                node.left = node.right = null;
 
-            node.left = node.right = null;
-
-            return successor;
+                retNode = successor;
+//            return successor;
+            }
         }
+
+        /**********************************************************************
+         *                    维护retNode节点的平衡                           *
+         **********************************************************************/
+
+        if(retNode == null){
+            return null;
+        }
+
+        // 更新高度值
+        retNode.height = 1 + Math.max(getHeight(retNode.left),getHeight(retNode.right));
+
+        // 计算平衡因子
+        int balanceFactor = getFactor(retNode);
+
+        // 平衡维护
+        // LL
+        if(balanceFactor > 1 && getFactor(retNode.left) >= 0 ){
+            // 做完右旋操作后就满足了以当前节点为根节点的二叉树既是平衡二叉树也是BST
+            return rightRotate(retNode);
+        }
+
+        // RR
+        if(balanceFactor < -1 && getFactor(retNode.right)<=0){
+            return leftRotate(retNode);
+        }
+
+        // LR
+        if(balanceFactor > 1 && getFactor(retNode.left) < 0){
+            retNode.left = leftRotate(retNode.left);
+            return rightRotate(retNode);
+        }
+
+        // RL
+        if(balanceFactor < -1 && getFactor(retNode.right) > 0){
+            retNode.right = rightRotate(retNode.right);
+            return leftRotate(retNode);
+        }
+
+        return retNode;
     }
 
     public static void main(String[] args){
@@ -369,6 +420,14 @@ public class AVLTree<K extends Comparable<K>, V> {
 
             System.out.println("is BST : "+ map.isBST());
             System.out.println("is Balanced : "+map.isBalancedTree());
+
+            // 将每个词删掉
+            for(String word : words){
+                map.remove(word);
+                if(!map.isBST() || !map.isBalancedTree()){
+                    throw new RuntimeException("map isnot BST OR isnot BalancedTree. ");
+                }
+            }
         }
 
         System.out.println();
